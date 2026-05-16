@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+GeoPrecision Pro
+</title>
+
+<!-- CSS -->
+
+<link rel="stylesheet"
+href="style.css">
+
+<!-- ICON -->
+
+<link rel="icon"
+type="image/png"
+href="assets/icon.png">
+
+<!-- FONT -->
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap"
+rel="stylesheet">
+
+<!-- ICONS -->
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- LEAFLET -->
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+
+<!-- SPLASH -->
+
+<div id="splash">
+
+<img src="assets/splash.png"
+class="splash-logo">
+
+<h1>
+GeoPrecision Pro
+</h1>
+
+<p>
+Professional GIS & Survey Tool
+</p>
+
+<div class="splash-dev">
+
+Developed By
+
+<br>
+
+Eng-Marco Demitry
+
+</div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="sidebar-logo">
+
+<img src="assets/logo.png">
+
+<h2>
+GeoPrecision
+</h2>
+
+</div>
+
+<ul>
+
+<li class="active">
+
+<i class="fa-solid fa-compass"></i>
+
+Converter
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-ruler-combined"></i>
+
+Area Tool
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-map-location-dot"></i>
+
+Live Map
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-location-crosshairs"></i>
+
+GPS
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-bookmark"></i>
+
+Saved Points
+
+</li>
+
+<li>
+
+<i class="fa-solid fa-gear"></i>
+
+Settings
+
+</li>
+
+</ul>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main-content">
+
+<!-- HEADER -->
+
+<div class="topbar">
+
+<div>
+
+<h1>
+GeoPrecision Pro
+</h1>
+
+<p>
+Professional Coordinate Converter & Survey Tool
+</p>
+
+</div>
+
+<button class="theme-btn"
+onclick="toggleTheme()">
+
+<i class="fa-solid fa-moon"></i>
+
+</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<span>
+Projection
+</span>
+
+<strong>
+WGS84 / UTM 36N
+</strong>
+
+</div>
+
+<div class="dashboard-card">
+
+<span>
+GPS Status
+</span>
+
+<strong id="gpsStatus">
+
+Disconnected
+
+</strong>
+
+</div>
+
+<div class="dashboard-card">
+
+<span>
+Total Points
+</span>
+
+<strong id="totalPoints">
+
+0
+
+</strong>
+
+</div>
+
+<div class="dashboard-card">
+
+<span>
+Area m²
+</span>
+
+<strong id="areaMeters">
+
+0
+
+</strong>
+
+</div>
+
+</div>
+
+<!-- INDICATION -->
+
+<div class="card">
+
+<div class="card-title">
+
+Coordinate Indication
+
+</div>
+
+<div class="indicator-box">
+
+<div class="indicator-item">
+
+Latitude
+
+<span>↔</span>
+
+Northing
+
+</div>
+
+<div class="indicator-item">
+
+Longitude
+
+<span>↔</span>
+
+Easting
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CONVERTER -->
+
+<div class="card">
+
+<div class="card-title">
+
+Coordinate Converter
+
+</div>
+
+<!-- TYPE -->
+
+<label>
+
+Conversion Type
+
+</label>
+
+<select id="conversionType">
+
+<option value="decimalToDMS">
+
+Decimal → DMS
+
+</option>
+
+<option value="dmsToDecimal">
+
+DMS → Decimal
+
+</option>
+
+<option value="decimalToUTM">
+
+Decimal → UTM
+
+</option>
+
+<option value="utmToDecimal">
+
+UTM → Decimal
+
+</option>
+
+</select>
+
+<!-- DECIMAL -->
+
+<div id="decimalSection">
+
+<label>
+Latitude
+</label>
+
+<input type="number"
+id="decimalLat"
+step="any"
+placeholder="Latitude">
+
+<label>
+Longitude
+</label>
+
+<input type="number"
+id="decimalLon"
+step="any"
+placeholder="Longitude">
+
+</div>
+
+<!-- DMS -->
+
+<div id="dmsSection"
+style="display:none;">
+
+<label>
+Latitude DMS
+</label>
+
+<div class="dms-group">
+
+<input type="number"
+id="inputLatDeg"
+placeholder="Deg">
+
+<input type="number"
+id="inputLatMin"
+placeholder="Min">
+
+<input type="number"
+id="inputLatSec"
+placeholder="Sec">
+
+<select id="inputLatDir">
+
+<option>N</option>
+<option>S</option>
+
+</select>
+
+</div>
+
+<label>
+Longitude DMS
+</label>
+
+<div class="dms-group">
+
+<input type="number"
+id="inputLonDeg"
+placeholder="Deg">
+
+<input type="number"
+id="inputLonMin"
+placeholder="Min">
+
+<input type="number"
+id="inputLonSec"
+placeholder="Sec">
+
+<select id="inputLonDir">
+
+<option>E</option>
+<option>W</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- UTM -->
+
+<div id="utmSection"
+style="display:none;">
+
+<label>
+UTM Zone
+</label>
+
+<select id="utmZone">
+
+<option>
+36N
+</option>
+
+<option>
+35N
+</option>
+
+<option>
+37N
+</option>
+
+</select>
+
+<label>
+Easting
+</label>
+
+<input type="number"
+id="utmEasting"
+placeholder="Easting">
+
+<label>
+Northing
+</label>
+
+<input type="number"
+id="utmNorthing"
+placeholder="Northing">
+
+</div>
+
+<!-- RESULTS -->
+
+<div class="results-grid">
+
+<div class="result-card">
+
+<span>
+Latitude
+</span>
+
+<strong id="resultLat">
+
+---
+
+</strong>
+
+</div>
+
+<div class="result-card">
+
+<span>
+Longitude
+</span>
+
+<strong id="resultLon">
+
+---
+
+</strong>
+
+</div>
+
+<div class="result-card">
+
+<span>
+Easting
+</span>
+
+<strong id="resultEasting">
+
+---
+
+</strong>
+
+</div>
+
+<div class="result-card">
+
+<span>
+Northing
+</span>
+
+<strong id="resultNorthing">
+
+---
+
+</strong>
+
+</div>
+
+</div>
+
+<!-- DMS OUTPUT -->
+
+<div class="dms-output">
+
+<div>
+
+<label>
+Latitude DMS
+</label>
+
+<div class="dms-group">
+
+<input id="latDeg"
+readonly>
+
+<input id="latMin"
+readonly>
+
+<input id="latSec"
+readonly>
+
+<input id="latDir"
+readonly>
+
+</div>
+
+</div>
+
+<div>
+
+<label>
+Longitude DMS
+</label>
+
+<div class="dms-group">
+
+<input id="lonDeg"
+readonly>
+
+<input id="lonMin"
+readonly>
+
+<input id="lonSec"
+readonly>
+
+<input id="lonDir"
+readonly>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<button class="main-btn"
+onclick="copyResults()">
+
+<i class="fa-solid fa-copy"></i>
+
+Copy
+
+</button>
+
+<button class="main-btn"
+onclick="clearAllFields()">
+
+<i class="fa-solid fa-trash"></i>
+
+Clear
+
+</button>
+
+<button class="main-btn"
+onclick="openMap()">
+
+<i class="fa-solid fa-map"></i>
+
+Map
+
+</button>
+
+</div>
+
+</div>
+
+<!-- SURVEY -->
+
+<div class="card">
+
+<div class="card-title">
+
+Area & Survey Tool
+
+</div>
+
+<!-- INPUT TYPE -->
+
+<label>
+Point Input Type
+</label>
+
+<select id="pointInputType">
+
+<option value="decimal">
+
+Decimal
+
+</option>
+
+<option value="dms">
+
+DMS
+
+</option>
+
+<option value="utm">
+
+UTM
+
+</option>
+
+</select>
+
+<!-- DECIMAL POINT -->
+
+<div id="pointDecimalSection">
+
+<label>
+Latitude
+</label>
+
+<input type="number"
+id="pointLat"
+step="any"
+placeholder="Latitude">
+
+<label>
+Longitude
+</label>
+
+<input type="number"
+id="pointLon"
+step="any"
+placeholder="Longitude">
+
+</div>
+
+<!-- DMS POINT -->
+
+<div id="pointDMSSection"
+style="display:none;">
+
+<label>
+Latitude DMS
+</label>
+
+<div class="dms-group">
+
+<input type="number"
+id="pointLatDeg"
+placeholder="Deg">
+
+<input type="number"
+id="pointLatMin"
+placeholder="Min">
+
+<input type="number"
+id="pointLatSec"
+placeholder="Sec">
+
+<select id="pointLatDir">
+
+<option>N</option>
+<option>S</option>
+
+</select>
+
+</div>
+
+<label>
+Longitude DMS
+</label>
+
+<div class="dms-group">
+
+<input type="number"
+id="pointLonDeg"
+placeholder="Deg">
+
+<input type="number"
+id="pointLonMin"
+placeholder="Min">
+
+<input type="number"
+id="pointLonSec"
+placeholder="Sec">
+
+<select id="pointLonDir">
+
+<option>E</option>
+<option>W</option>
+
+</select>
+
+</div>
+
+</div>
+
+<!-- UTM POINT -->
+
+<div id="pointUTMSection"
+style="display:none;">
+
+<label>
+Easting
+</label>
+
+<input type="number"
+id="pointEasting"
+placeholder="Easting">
+
+<label>
+Northing
+</label>
+
+<input type="number"
+id="pointNorthing"
+placeholder="Northing">
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<button class="main-btn"
+onclick="addPoint()">
+
+<i class="fa-solid fa-plus"></i>
+
+Add Point
+
+</button>
+
+<button class="main-btn"
+onclick="useCurrentGPS()">
+
+<i class="fa-solid fa-location-crosshairs"></i>
+
+GPS
+
+</button>
+
+<button class="main-btn"
+onclick="clearSurvey()">
+
+<i class="fa-solid fa-trash"></i>
+
+Clear
+
+</button>
+
+</div>
+
+<!-- POINTS -->
+
+<div class="points-box"
+id="pointsList">
+
+No Points Added
+
+</div>
+
+<!-- PERIMETER -->
+
+<div class="perimeter-box">
+
+<span>
+Perimeter
+</span>
+
+<strong id="perimeter">
+
+0
+
+</strong>
+
+</div>
+
+</div>
+
+<!-- MAP -->
+
+<div class="card">
+
+<div class="card-title">
+
+Live Map
+
+</div>
+
+<div id="map"></div>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+GeoPrecision Pro © 2026
+
+<br>
+
+Developed By
+Eng-Marco Demitry
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
